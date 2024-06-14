@@ -1,5 +1,6 @@
 import unittest
 from datetime import datetime, timedelta
+from unittest.mock import Mock
 
 import schedule
 from booking_scheduler import BookingScheduler
@@ -8,8 +9,10 @@ from schedule import Customer, Schedule
 
 NOT_ON_THE_HOUR = datetime.strptime('2021/03/26 09:05', '%Y/%m/%d %H:%M')
 ON_THE_HOUR = datetime.strptime('2021/03/26 09:00', '%Y/%m/%d %H:%M')
-CUSTOMER = Customer('Fake name', '010-1234-5678')
-CUSTOMER_WITH_MAIL = Customer('Fake Name', '010-1234-5678', 'test@test.com')
+CUSTOMER = Mock()
+CUSTOMER.get_email.return_value = None
+CUSTOMER_WITH_MAIL = Mock()
+CUSTOMER_WITH_MAIL.get_email.return_value = 'test@test.com'
 
 UNDER_CAPACITY = 1
 CAPACITY_PER_HOUR = 3
@@ -22,7 +25,7 @@ class TestableScheduler(BookingScheduler):
 
     def get_now(self):
         return datetime.strptime(self._date_time, '%Y/%m/%d %H:%M')
-    
+
 
 class BookingSchedulerTest(unittest.TestCase):
 
